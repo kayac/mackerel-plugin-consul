@@ -23,6 +23,6 @@ done
 PREV_PEERS="$([[ -f $TEMP_FILE ]] && cat $TEMP_FILE)"
 PEERS="$(curl -s http://$HOST:$PORT/v1/status/peers | tee $TEMP_FILE)"
 
-if [[ $PREV_PEERS != $PEERS ]]; then
+if [[ "$PREV_PEERS" != "$PEERS" ]]; then
     exit 1
 fi
