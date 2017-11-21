@@ -24,10 +24,8 @@ done
 
 curl -s http://$HOST:$PORT/v1/status/leader | fgrep -q '""'
 
-STATUS=$?
-
-if [[ $STATUS == "0" ]]; then
+if [[ $? == 0 ]]; then
     exit $ALERT_STATUS
-elif [[ $STATUS == "1" ]]; then
-    exit 0
 fi
+
+exit 0

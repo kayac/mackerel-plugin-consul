@@ -5,8 +5,9 @@ VERSION=v0.1.1
 HOST=127.0.0.1
 PORT=8500
 TEMP_FILE=/var/tmp/mackerel-agent/consul-server-nodes-changed
+ALERT_STATUS=2
 
-while getopts h:p:t:v OPT; do
+while getopts h:p:t:vcw OPT; do
     case $OPT in
         h)
             HOST=$OPTARG;;
@@ -14,6 +15,10 @@ while getopts h:p:t:v OPT; do
             PORT=$OPTARG;;
         t)
             TEMP_FILE=$OPTARG;;
+        c)
+            ALERT_STATUS=2;;
+        w)
+            ALERT_STATUS=1;;
         v)
             echo $VERSION;
             exit 0;;
@@ -32,4 +37,8 @@ STATUS=$?
 
 echo "$PEERS" > $TEMP_FILE
 
-exit $STATUS
+if [[ $STATUS != "0" ]]; then
+    exit $ALERT_STATUS
+fi
+
+exit 0
