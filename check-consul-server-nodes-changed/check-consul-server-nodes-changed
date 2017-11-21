@@ -20,9 +20,16 @@ while getopts h:p:t:v OPT; do
     esac
 done
 
-PREV_PEERS="$([[ -f $TEMP_FILE ]] && cat $TEMP_FILE)"
-PEERS="$(curl -s http://$HOST:$PORT/v1/status/peers | tee $TEMP_FILE)"
+PEERS="$(curl -s http://$HOST:$PORT/v1/status/peers)"
 
-if [[ "$PREV_PEERS" != "$PEERS" ]]; then
-    exit 1
+if [[ ! -f $TEMP_FILE ]]; then
+    echo "$PEERS" > $TEMP_FILE
 fi
+
+diff $TEMP_FILE <(echo "$PEERS")
+
+STATUS=$?
+
+echo "$PEERS" > $TEMP_FILE
+
+exit $STATUS
